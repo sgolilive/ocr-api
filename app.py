@@ -2,9 +2,11 @@ from ocr import process_image
 from fastapi import FastAPI, HTTPException
 import requests
 from logger import get_logger
+import pytesseract
 
 app = FastAPI()
 log = get_logger('api')
+pytesseract.pytesseract.tesseract_cmd = "/urs/bin/tesseract"
 @app.get("/")
 def root():
     return {"status": "running", "message": "OCR API is live!"}
