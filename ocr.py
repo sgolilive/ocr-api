@@ -7,8 +7,8 @@ from langdetect import detect
 from PIL import Image
 from logger import get_logger
 
-os.makedirs('../tessdata', exist_ok=True)
-os.environ['TESSDATA_PREFIX'] = os.path.abspath('../tessdata')
+os.makedirs('tessdata', exist_ok=True)
+os.environ['TESSDATA_PREFIX'] = os.path.abspath('tessdata')
 BASE_URL = "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/main/"
 
 log = get_logger('ocr')
