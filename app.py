@@ -35,7 +35,7 @@ async def ocr_api(url: str):
     final_response = {
         'image_url': url,
         'detected_lang': result['detected_lang'],
-        'tess_language': result['tess_language'],
+        'tess_lang': result['tess_lang'],
         'result': result['text']
     }
 

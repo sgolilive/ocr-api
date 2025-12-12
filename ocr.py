@@ -60,6 +60,10 @@ def _get_file_path(language):
 def _get_url(language):
   return f'{BASE_URL}{language}.traineddata'
 
+def _download_trained_languages(*language):
+    for lang in language:
+        _download_trained_language(lang)
+
 def _download_trained_language(language):
   filepath = _get_file_path(language)
 
@@ -83,8 +87,12 @@ def _download_image(url):
     return Image.open(requests.get(url, stream=True).raw)
 
 def _detect_language(image_data):
-  initial_text = pytesseract.image_to_string(image_data, lang="eng+spa+fra+deu+por")
-  return detect(initial_text)
+    _download_trained_languages('eng', 'spa', 'fra', 'deu', 'por')
+    try:
+        initial_text = pytesseract.image_to_string(image_data, lang="eng+spa+fra+deu+por")
+        return detect(initial_text)
+    except Exception as e:
+        log.error(f'Failed to detect language {e}')
 
 def process_image(image_data):
 
@@ -92,7 +100,7 @@ def process_image(image_data):
     image = Image.open(BytesIO(image_data))
 
     #detect the language in the image
-    detected_lang = _detect_language(image_data)
+    detected_lang = _detect_language(image)
 
     #find the tess language based on the detected language
     tess_lang = lang_map.get(detected_lang, "eng")
@@ -100,7 +108,7 @@ def process_image(image_data):
     #download the tess language if not already downloaded
     _download_trained_language(tess_lang)
 
-    #print(f'detected lang {detected_lang} and tess lang {tess_lang}')
+    log.info(f'detected language {detected_lang} and tesseract language {tess_lang}')
 
     #extract the test from the image based on the tess language
     custom_config = rf'-l {tess_lang} --oem 3 --psm 6'
