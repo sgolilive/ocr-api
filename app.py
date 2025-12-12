@@ -1,4 +1,4 @@
-from ocr import process_image
+from app.ocr import process_image
 from fastapi import FastAPI, HTTPException
 import requests
 from logger import get_logger
